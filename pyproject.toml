@@ -1,0 +1,76 @@
+[build-system]
+requires = ['flit_core >=3.2,<4']
+build-backend = 'flit_core.buildapi'
+
+[project]
+name = 'mpubsub'
+authors = [{name = 'Flavio Veloso Soares', email = 'flaviovs@magnux.com'}]
+license = {file = 'LICENSE'}
+classifiers = ['License :: OSI Approved :: MIT License']
+dynamic = ['version', 'description']
+readme = 'README.md'
+requires-python = '>=3.7.3'
+
+[project.urls]
+Home = 'https://github.com/flaviovs/mpubsub'
+
+[project.optional-dependencies]
+dev = [
+  'codespell',
+  'flake8-bugbear',
+  'flake8-builtins',
+  'flake8-docstrings',
+  'flake8-tidy-imports',
+  'flake8-walrus',
+  'flake8',
+  'flit',
+  'mypy',
+  'pylint',
+  'taskipy',
+]
+
+[tool.codespell]
+skip = '*~,./.git,./.venv,./.mypy_cache'
+
+[tool.taskipy.tasks]
+spellcheck = 'codespell'
+test = 'python -m unittest tests/test_*.py'
+lint = 'flake8 && mypy && pylint src tests'
+pre-commit = 'task spellcheck && task test && task lint'
+
+[tool.mypy]
+files = '.'
+python_version = '3.7'
+exclude = ['.git', '.venv']
+strict = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+
+[tool.pylint.master]
+ignore = ['.git', '.venv']
+ignore-patterns = '^\.#'
+load-plugins = [
+  'pylint.extensions.bad_builtin',
+  'pylint.extensions.check_elif',
+  'pylint.extensions.docparams',
+  'pylint.extensions.docstyle',
+  'pylint.extensions.overlapping_exceptions',
+]
+jobs = 0
+
+[tool.pylint.basic]
+good-names = [
+  'ex',
+  'fd',
+]
+
+
+[tool.pylint.messages_control]
+disable = [
+   # docstring checks and formatting already done by flake8.
+  'missing-function-docstring',
+  'missing-module-docstring',
+  'missing-class-docstring',
+  'line-too-long',
+]
